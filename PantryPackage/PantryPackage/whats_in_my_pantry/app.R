@@ -8,7 +8,7 @@ ui <- fluidPage(
             textInput("ingredient", "What do you have?",
                       placeholder = "e.g., tomato"), # ingredient input
             selectizeInput("diet", "dietary restrictions?",
-                           choices = diets, allowEmptyOption = TRUE), #diet input
+                           choices = diets, allowEmptyOption = TRUE),#diet input
             textOutput("recipe")
         )
 

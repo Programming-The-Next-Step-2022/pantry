@@ -18,7 +18,8 @@ pantryrecipe <- VERB("GET", url,
                      'spoonacular-recipe-food-nutrition-v1.p.rapidapi.com',
                    'X-RapidAPI-Key' =
                      'b729bf5802mshd4d7b8537e441f3p1850d9jsnc8b828bd5f3a'),
-                 query = pantrycontent, content_type("application/octet-stream"))
+                 query = pantrycontent,
+                 content_type("application/octet-stream"))
 
 pulledrecipe <- content(pantryrecipe, "parsed")
 recipenumber <- length(pulledrecipe) # the number of recipes
@@ -27,6 +28,8 @@ id <- pulledrecipe[[recipenumber]][["id"]] # obtains recipe id
 # extracts recipe full info
 fullinfo <-
   "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/281307/information"
+
+paste0() # to add the id stuff
 
 responsefull <- VERB("GET", fullinfo,
                      add_headers(
@@ -58,7 +61,8 @@ while(recipeinfo[[diet]] == FALSE) { # for now it can update the recipe pulled
                            'spoonacular-recipe-food-nutrition-v1.p.rapidapi.com',
                          'X-RapidAPI-Key' =
                            'b729bf5802mshd4d7b8537e441f3p1850d9jsnc8b828bd5f3a'),
-                       query = pantrycontent, content_type("application/octet-stream"))
+                       query = pantrycontent,
+                       content_type("application/octet-stream"))
 
   pulledrecipe <- content(pantryrecipe, "parsed")
   id <- pulledrecipe[[numrecipe]][["id"]]
