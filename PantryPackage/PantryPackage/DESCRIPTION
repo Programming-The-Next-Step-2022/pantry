@@ -1,0 +1,10 @@
+Package: PantryPackage
+Type: Package
+Title: What's in your pantry?
+Version: 0.1.0
+Author: Eva Gabrilovica
+Maintainer: The package maintainer evagabrilovica@gmail.com
+Description: input what ingredients you already have and what dietary restrictions you follow, and obtain a recipe!
+License: MIT
+Encoding: UTF-8
+LazyData: true
