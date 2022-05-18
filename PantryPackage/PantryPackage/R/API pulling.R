@@ -26,9 +26,17 @@ recipenumber <- length(pulledrecipe) # the number of recipes
 id <- pulledrecipe[[recipenumber]][["id"]] # obtains recipe id
 
 # extracts recipe full info
+<<<<<<< Updated upstream
 fullinfo <-
   "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/281307/information"
 
+=======
+aaaa <-
+  "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/281307/information"
+
+notfullinfo <- "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/"
+
+>>>>>>> Stashed changes
 paste0() # to add the id stuff
 
 responsefull <- VERB("GET", fullinfo,
@@ -42,9 +50,12 @@ responsefull <- VERB("GET", fullinfo,
 recipeinfo <- content(responsefull, "parsed")
 
 
+<<<<<<< Updated upstream
 # ASK FOR HELP W THE URL THING
 
 
+=======
+>>>>>>> Stashed changes
 while(recipeinfo[[diet]] == FALSE) { # for now it can update the recipe pulled
   numrecipe <- 1
 
@@ -89,5 +100,13 @@ if(recipeinfo[[diet]] == "TRUE") { # if dietary restrictions match
 }
 
 
+<<<<<<< Updated upstream
+=======
+get_id <- function # a function that does the ID thing; takes ingredients and number of recipes
+get_info <- function # takes the ids and returns the recipe information
+# document the functions!!!!!!!
+
+
+>>>>>>> Stashed changes
 
 
