@@ -1,40 +1,7 @@
-library(httr)
-
-url <-
-  "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/findByIngredients"
-
-# pulls recipe based on ingredients
-pantrycontent <- list(
-  ingredients = "chickpeas, spinach, tomato", # required parameter
-  ranking = "1", # 1 = maximize used ingredients
-  # 2 = minimize missing ingredients first
-  ignorePantry = "true", #ignore salt, sugar, flour etc.
-  number = "1" # number of recipes to return
-)
-
-pantryrecipe <- VERB("GET", url,
-                 add_headers(
-                   'X-RapidAPI-Host' =
-                     'spoonacular-recipe-food-nutrition-v1.p.rapidapi.com',
-                   'X-RapidAPI-Key' =
-                     'b729bf5802mshd4d7b8537e441f3p1850d9jsnc8b828bd5f3a'),
-                 query = pantrycontent,
-                 content_type("application/octet-stream"))
-
-pulledrecipe <- content(pantryrecipe, "parsed")
-recipenumber <- length(pulledrecipe) # the number of recipes
-id <- pulledrecipe[[recipenumber]][["id"]] # obtains recipe id
-
 # extracts recipe full info
-fullinfo <-
-  "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/281307/information"
-
-aaaa <-
-  "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/281307/information"
-
 notfullinfo <- "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/"
 
-paste0() # to add the id stuff
+fullinfo <- paste0(notfullinfo, as.character(id), "/information")
 
 responsefull <- VERB("GET", fullinfo,
                      add_headers(
@@ -91,11 +58,50 @@ if(recipeinfo[[diet]] == "TRUE") { # if dietary restrictions match
 }
 
 
-
-get_id <- function # a function that does the ID thing; takes ingredients and number of recipes
 get_info <- function # takes the ids and returns the recipe information
 # document the functions!!!!!!!
 
+
+
+# A function that takes ingredients and (optional) number of recipes
+# create a character vector of the ingredients you wish to use and use in the
+# ingredients slot
+
+stuff <- c("tomato", "cucumber")
+
+get_id <- function(ingredients, nRecipes = 1) {
+  library(httr)
+  library(tidyverse)
+
+  url <-
+    "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/findByIngredients"
+
+  pantrycontent <- list(
+    ingredients = str_c(ingredients, collapse = ", "),
+    ranking = "1",
+    ignorePantry = "true",
+    number = as.character(nRecipes)
+  )
+
+  pantryrecipe <- VERB("GET", url,
+                       add_headers(
+                         'X-RapidAPI-Host' =
+                           'spoonacular-recipe-food-nutrition-v1.p.rapidapi.com',
+                         'X-RapidAPI-Key' =
+                           'b729bf5802mshd4d7b8537e441f3p1850d9jsnc8b828bd5f3a'),
+                       query = pantrycontent,
+                       content_type("application/octet-stream"))
+
+  pulledrecipe <- content(pantryrecipe, "parsed")
+  recipenumber <- length(pulledrecipe) # the number of recipes
+
+  id <- c()
+  for(i in 1:recipenumber) { # adds each id with more recipes requested
+    id[i] <- pulledrecipe[[i]][["id"]]
+  }
+
+  print(id)
+}
 
 
 
