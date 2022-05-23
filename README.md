@@ -1,1 +1,1 @@
-Yay! Recipes!
+This package is for looking up recipes that fit what you already have in your pantry. You can filter by dietary restrictions and type of food you want. Just select the items you would like to use and a recipe will be selected.
