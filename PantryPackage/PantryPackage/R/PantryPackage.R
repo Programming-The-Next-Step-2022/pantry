@@ -1,0 +1,15 @@
+#' This package produces recipes based on what food you already have
+#' 
+#' The package contains two functions: 1) get_id() and 2) recipe_info()
+#' 
+#' @section Get ID:
+#' \emph{get_id} produces ID numbers of recipes based on an ingredient list 
+#' input
+#' 
+#' @section Recipe Info:
+#' \emph{recipe_info} produces full recipe information based on recipe ID and
+#' dietary restrictions
+#' 
+#' @docType package
+#' @name Pantry
+NULL
