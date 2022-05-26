@@ -2,26 +2,29 @@
 % Please edit documentation in R/infofun.R
 \name{get_info}
 \alias{get_info}
-\title{Gives full recipe information with input of ingredients and dietary restriction}
+\title{Gives an output of ingredients needed for recipe and a url to the recipe with
+input of ingredients and dietary restriction}
 \usage{
-get_info(ingredients, diet = "")
+get_info(ingredients, diet = NULL)
 }
 \arguments{
 \item{ingredients}{A character vector of individual ingredients;
 no limit on length}
 
-\item{diet}{A character of dietary restrictions. Can be 'vegetarian', 'vegan',
-'glutenFree', or 'dairyFree'. By default it is empty.}
+\item{diet}{A character of dietary restrictions. By default it is NULL.
+If diet label is longer than one word, hyphenate it
+(e.g., gluten free = Gluten-Free)}
 }
 \value{
 Gives recipe information in a list form.
 }
 \description{
-Gives full recipe information with input of ingredients and dietary restriction
+Gives an output of ingredients needed for recipe and a url to the recipe with
+input of ingredients and dietary restriction
 }
 \examples{
 FoodYouHave <- c("chickpeas", "tomato", "spinach")
-recipe <- get_info(FoodYouHave, "vegan")
+recipe <- get_info(FoodYouHave, "Vegan")
 
 print(recipe)
 
