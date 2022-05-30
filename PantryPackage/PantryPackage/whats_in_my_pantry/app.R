@@ -12,23 +12,33 @@ ui <- fluidPage(
               placeholder = "e.g., tomato"), # ingredient input
     selectInput("diet", "dietary restrictions?",
                 choices = diets), # diet input
-    textOutput("recipe")
+    textOutput("i"), # for testing
+    textOutput("d"),
+    textOutput("recipe"),
+    actionButton("button", "Get recipe!")
     )
 
 server <- function(input, output) {
 
-  recipeinfo <- reactive({
-    food <- renderText(strsplit(input$ingredient, ",\\s*")[[1]])
-    restr <- if (input$diet == "None") {
-      restr <- NULL
-    } else {
-      renderText(as.character(input$diet))
-    }
-    return(get_info(ingredients == food, diet == restr))
-  })
+  food <- reactive({
+    strsplit(input$ingredient, ",\\s*")[[1]] })
+    # creates input into a character vector
 
-  output$recipe <- renderUI({recipeinfo})
-  }
+  restr <- reactive({
+    strsplit(input$diet, ",\\s*")[[1]] })
+    # creates input into a character vector
+
+    output$i <- renderPrint(food())
+    output$d <- renderPrint(restr())
+
+    observeEvent(input$button, {
+    output$recipe <-
+      renderPrint({
+        recipe <- get_info(food(), restr())
+        return(recipe[[1]])
+      }) # make a for loop with each button press updating the next recipe on the list
+  })
+}
 
 # Run the application
 shinyApp(ui = ui, server = server)

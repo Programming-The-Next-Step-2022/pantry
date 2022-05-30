@@ -17,7 +17,7 @@
 #' print(recipe)
 #'
 #' @export
-get_info <- function(ingredients, diet = NULL) {
+get_info <- function(ingredients, diet = "None") {
   library(httr)
   library(rlang)
 
@@ -45,7 +45,7 @@ get_info <- function(ingredients, diet = NULL) {
   n <- 0
   masterlist <- list()
 
-  if (is.null(diet) == FALSE) { # if diet field is filled out
+  if (diet != "None") { # if diet field is filled out
 
     for (i in 1:length(recipeinfo[["hits"]])) { # cycles through all retrieved recipes
 

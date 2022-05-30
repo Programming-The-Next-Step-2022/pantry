@@ -5,7 +5,7 @@
 \title{Gives an output of ingredients needed for recipe and a url to the recipe with
 input of ingredients and dietary restriction}
 \usage{
-get_info(ingredients, diet = NULL)
+get_info(ingredients, diet = "None")
 }
 \arguments{
 \item{ingredients}{A character vector of individual ingredients;
