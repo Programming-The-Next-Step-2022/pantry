@@ -1,0 +1,34 @@
+---
+title: "Vignette"
+author: "Eva Gabrilovica"
+date: "5/25/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Explaining "What's in my pantry?"
+
+The shiny app takes ingredient and diet input and gives the recipe title, 
+ingredients and url.
+
+## The input
+
+```{r input, eval = FALSE}
+diets <- c("None", "Pescatarian" ,"Vegetarian", "Vegan", "Gluten Free",
+              "Dairy Free", "Soy Free", "Pork Free")
+
+ui <- fluidPage(
+    title = "What's in the pantry?",
+    textInput("ingredient", "What do you have?",
+              placeholder = "e.g., tomato"), # ingredient input
+    selectInput("diet", "dietary restrictions?",
+                choices = diets), # diet input
+    textOutput("recipe")
+    )
+```
+
+Here is my code, IF I COULD GET IT TO WORK
+
