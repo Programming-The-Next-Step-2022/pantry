@@ -12,9 +12,8 @@ ui <- fluidPage(
               placeholder = "e.g., tomato"), # ingredient input
     selectInput("diet", "dietary restrictions?",
                 choices = diets), # diet input
-    textOutput("i"), # for testing
-    textOutput("d"),
-    textOutput("recipe"),
+    tableOutput("titleurl"),
+    tableOutput("ingtable"),
     actionButton("button", "Get recipe!")
     )
 
@@ -28,16 +27,36 @@ server <- function(input, output) {
     strsplit(input$diet, ",\\s*")[[1]] })
     # creates input into a character vector
 
-    output$i <- renderPrint(food())
-    output$d <- renderPrint(restr())
+    n <- reactiveVal(0)
+    recipe <- reactive({
+      get_info(food(), restr())
+    })
 
-    observeEvent(input$button, {
-    output$recipe <-
-      renderPrint({
+    observeEvent(input$button, { #pulls up the recipe
+
+      n(n() + 1) #for the button to update
+
+      output$titleurl <- renderTable({ #renders the title and url of the recipe
+        validate( # error message if recipes have been run through
+          need(length(recipe) != n(), "Ran out of food :-(")
+        )
         recipe <- get_info(food(), restr())
-        return(recipe[[1]])
-      }) # make a for loop with each button press updating the next recipe on the list
-  })
+        df <- data.frame(recipe[[n()]][[1]], recipe[[n()]][[2]])
+        colnames(df) <- c("Title", "url")
+        return(df)
+      })
+
+      output$ingtable <- renderTable({ #renders ingredients of the recipe
+        validate(
+          need(length(recipe) != n(), "Ran out of food :-(")
+        )
+        recipe <- get_info(food(), restr())
+        df2 <- matrix(recipe[[n()]][[3]], ncol = 1)
+        colnames(df2) <- c("Ingredients")
+        return(df2)
+      })
+    })
+
 }
 
 # Run the application
