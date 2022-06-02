@@ -54,7 +54,7 @@ server <- function(input, output, session) {
 
       output$title <- renderTable({ #renders the title of the recipe
         validate( # error message if recipes have been run through
-          need(length(recipe()) != n(), "Ran out of food :-(")
+          need(n() <=  length(recipe()), "Ran out of food :-(")
         )
         df <- data.frame(recipe()[[n()]][[1]])
         colnames(df) <- c("Title")
@@ -62,8 +62,8 @@ server <- function(input, output, session) {
       })
 
       output$link <- renderUI({ # gives the url to the recipe
-        validate( # error message if recipes have been run through
-          need(length(recipe) != n(), "Ran out of food :-(")
+        validate(
+          need(n() <=  length(recipe()), "Ran out of food :-(")
         )
         url <- a("Link to the recipe",
                  href = recipe()[[n()]][[2]],
@@ -74,7 +74,7 @@ server <- function(input, output, session) {
 
       output$ingtable <- renderTable({ #renders ingredients of the recipe
         validate(
-          need(length(recipe()) != n(), "Ran out of food :-(")
+          need(n() <=  length(recipe()), "Ran out of food :-(")
         )
         df2 <- matrix(recipe()[[n()]][[3]], ncol = 1)
         colnames(df2) <- c("Ingredients")
@@ -87,5 +87,4 @@ server <- function(input, output, session) {
     })
 }
 
-# Run the application
 shinyApp(ui = ui, server = server)

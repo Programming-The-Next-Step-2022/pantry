@@ -1,0 +1,13 @@
+name: whats_in_my_pantry
+title: whats_in_my_pantry
+username:
+account: bleva
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 6417144
+bundleId: 5970678
+url: https://bleva.shinyapps.io/whats_in_my_pantry/
+when: 1654154624.94842
+lastSyncTime: 1654154624.94843
+asMultiple: FALSE
+asStatic: FALSE

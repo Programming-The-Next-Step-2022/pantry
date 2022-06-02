@@ -2,7 +2,10 @@
 title: "Vignette"
 author: "Eva Gabrilovica"
 date: "5/25/2022"
-output: html_document
+output: 
+  html_document: 
+    theme: cerulean
+    highlight: zenburn
 ---
 
 ```{r setup, include=FALSE}
@@ -61,7 +64,6 @@ and another that resets the app.
 
 ```{r img1, echo = FALSE, out.width = "100%"}
 knitr::include_graphics("/Users/evagabrilovica/Desktop/pic1.png")
-
 ```
 
 This is how the app looks prior to any input added.
@@ -90,7 +92,7 @@ server <- function(input, output, session) {
 
       output$title <- renderTable({ #renders the title of the recipe
         validate( # error message if recipes have been run through
-          need(length(recipe()) != n(), "Ran out of food :-(")
+          need(n() <=  length(recipe()), "Ran out of food :-(")
         )
         df <- data.frame(recipe()[[n()]][[1]])
         colnames(df) <- c("Title")
@@ -98,8 +100,8 @@ server <- function(input, output, session) {
       })
 
       output$link <- renderUI({ # gives the url to the recipe
-        validate( # error message if recipes have been run through
-          need(length(recipe) != n(), "Ran out of food :-(")
+        validate(
+          need(n() <=  length(recipe()), "Ran out of food :-(")
         )
         url <- a("Link to the recipe",
                  href = recipe()[[n()]][[2]],
@@ -110,7 +112,7 @@ server <- function(input, output, session) {
 
       output$ingtable <- renderTable({ #renders ingredients of the recipe
         validate(
-          need(length(recipe()) != n(), "Ran out of food :-(")
+          need(n() <=  length(recipe()), "Ran out of food :-(")
         )
         df2 <- matrix(recipe()[[n()]][[3]], ncol = 1)
         colnames(df2) <- c("Ingredients")
@@ -124,5 +126,67 @@ server <- function(input, output, session) {
 }
 ```
 
+The food and diet inputs must first be converted into character vectors for the 
+function to read them.
+
+Then I created a variable that keeps track of which recipe the function is on 
+with each button press (the variable 'n'). This also pulls each following 
+recipe, because the function initially pulls all recipes that match its query.
+
+Then I render two tables and an URL. The rendering is in table format because it
+looks nicer than plain text, given the data type. The URL being an already 
+usable link is for easier access to the recipe.
+
+The reset button reloads the entire session, when a person wants to change the 
+ingredients and/or the dietary restriction.
+
+Finally, the validate( ) function is mainly to display a more informative error 
+message, when n becomes larger than the length of the recipe. Or in other words, 
+when all recipes have been cycled through.
+
+
+## Briefly about the get_info() function
+```{r getinfo, eval = FALSE}
+food <- c("chickpeas", "tomato")
+recipes <- PantryPackage::get_info(food, "Vegan")
+```
+
+The function pulls recipes from a food API and puts them into a list. The 
+function first calls for recipes that contain the requested ingredients and then 
+goes through each and puts the recipes in a list that match the dietary 
+requirement. This is the backbone of the shiny app.
+
+## Appearence when recipe is pulled
+
+```{r img2, echo = FALSE, out.width = "100%"}
+knitr::include_graphics("/Users/evagabrilovica/Desktop/pic2.png")
+```
+
+This is what the output of recipe title, ingredients and url looks like with the
+input of "chicken" and "potato" and no dietary restriction. If you press on the
+"Get Recipe!" button, the next recipe is pulled. (See below the next pulled 
+recipe)
+
+```{r img3, echo = FALSE, out.width = "100%"}
+knitr::include_graphics("/Users/evagabrilovica/Desktop/pic3.png")
+```
+
+
+## Error message display
+
+```{r img4, echo = FALSE, out.width = "100%"}
+knitr::include_graphics("/Users/evagabrilovica/Desktop/pic4.png")
+```
+
+Once you run out of recipes, this is what is displayed.
+
+## How to run it
+
+```{r runapp, eval = FALSE}
+PantryPackage::whatsinmypantry()
+```
+
+This is the function that runs the Shiny app. It will open a new browser window
+with the app.
 
 
