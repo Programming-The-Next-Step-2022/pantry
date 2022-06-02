@@ -47,12 +47,14 @@ get_info <- function(ingredients, diet = "None") {
 
   if (diet != "None") { # if diet field is filled out
 
-    for (i in 1:length(recipeinfo[["hits"]])) { # cycles through all retrieved recipes
+    for (i in 1:length(recipeinfo[["hits"]])) {
+      # cycles through all retrieved recipes
 
       if ((diet %in% recipeinfo[["hits"]][[i]][["recipe"]][["healthLabels"]]) == TRUE) {
         # contains all allergy info
         n <- n + 1
-        matchrecipe[n] <- i # creates a vector of recipes that fit dietary requirement
+        matchrecipe[n] <- i
+        # creates a vector of recipes that fit dietary requirement
       } else {
         next
       }

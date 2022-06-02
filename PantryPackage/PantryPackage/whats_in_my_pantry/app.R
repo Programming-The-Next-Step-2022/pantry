@@ -2,22 +2,38 @@
 
 library(shiny)
 library(PantryPackage)
+library(htmltools)
 
 diets <- c("None", "Pescatarian" ,"Vegetarian", "Vegan", "Gluten Free",
               "Dairy Free", "Soy Free", "Pork Free")
 
 ui <- fluidPage(
     title = "What's in the pantry?",
-    textInput("ingredient", "What do you have?",
+
+    titlePanel("What's in my pantry?"),
+    textInput("ingredient",
+              "What do you have? Separate ingredients with a comma",
               placeholder = "e.g., tomato"), # ingredient input
     selectInput("diet", "dietary restrictions?",
                 choices = diets), # diet input
-    tableOutput("titleurl"),
-    tableOutput("ingtable"),
-    actionButton("button", "Get recipe!")
-    )
+    sidebarLayout(
+      sidebarPanel(
+        tableOutput("title"), #gives title
+        tableOutput("ingtable"), #gives the ingredients
+        actionButton("button", "Get recipe!"),
+        actionButton("reset", "New search?")
+        ),
 
-server <- function(input, output) {
+      mainPanel(
+        h3("If you want another recipe, click on the 'Get Recipe!' button."),
+        h3("If you want to change the ingredients and/or the diet,
+           press the 'New search?' button"),
+        uiOutput("link")
+      )
+    )
+  )
+
+server <- function(input, output, session) {
 
   food <- reactive({
     strsplit(input$ingredient, ",\\s*")[[1]] })
@@ -36,27 +52,39 @@ server <- function(input, output) {
 
       n(n() + 1) #for the button to update
 
-      output$titleurl <- renderTable({ #renders the title and url of the recipe
+      output$title <- renderTable({ #renders the title of the recipe
+        validate( # error message if recipes have been run through
+          need(length(recipe()) != n(), "Ran out of food :-(")
+        )
+        df <- data.frame(recipe()[[n()]][[1]])
+        colnames(df) <- c("Title")
+        return(df)
+      })
+
+      output$link <- renderUI({ # gives the url to the recipe
         validate( # error message if recipes have been run through
           need(length(recipe) != n(), "Ran out of food :-(")
         )
-        recipe <- get_info(food(), restr())
-        df <- data.frame(recipe[[n()]][[1]], recipe[[n()]][[2]])
-        colnames(df) <- c("Title", "url")
-        return(df)
+        url <- a("Link to the recipe",
+                 href = recipe()[[n()]][[2]],
+                 target = "_blank")
+
+        tagList(url)
       })
 
       output$ingtable <- renderTable({ #renders ingredients of the recipe
         validate(
-          need(length(recipe) != n(), "Ran out of food :-(")
+          need(length(recipe()) != n(), "Ran out of food :-(")
         )
-        recipe <- get_info(food(), restr())
-        df2 <- matrix(recipe[[n()]][[3]], ncol = 1)
+        df2 <- matrix(recipe()[[n()]][[3]], ncol = 1)
         colnames(df2) <- c("Ingredients")
         return(df2)
       })
     })
 
+    observeEvent(input$reset, { # reloads the entire app
+       session$reload()
+    })
 }
 
 # Run the application
