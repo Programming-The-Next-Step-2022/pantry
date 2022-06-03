@@ -2,21 +2,21 @@
 % Please edit documentation in R/shinyappfun.R
 \name{whatsinmypantry}
 \alias{whatsinmypantry}
-\title{Launches the Shiny app "What's in my pantry". Input ingredients and dietary 
+\title{Launches the Shiny app "What's in my pantry". Input ingredients and dietary
 restriction and obtain a recipe.}
 \usage{
 whatsinmypantry()
 }
 \value{
-Opens a new tab in your browser with the "What's in my pantry" shiny 
+Opens a new tab in your browser with the "What's in my pantry" shiny
 app. Input ingredients and dietary restriction and obtain a recipe!
 }
 \description{
-Launches the Shiny app "What's in my pantry". Input ingredients and dietary 
+Launches the Shiny app "What's in my pantry". Input ingredients and dietary
 restriction and obtain a recipe.
 }
 \examples{
-whatsinmypantry() # function is run with no input; it will launch a window 
+whatsinmypantry() # function is run with no input; it will launch a window
 #in your browser
 
 }

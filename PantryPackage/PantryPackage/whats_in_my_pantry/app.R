@@ -3,11 +3,12 @@
 library(shiny)
 library(PantryPackage)
 library(htmltools)
+library(shinythemes)
 
 diets <- c("None", "Pescatarian" ,"Vegetarian", "Vegan", "Gluten Free",
               "Dairy Free", "Soy Free", "Pork Free")
 
-ui <- fluidPage(
+ui <- fluidPage(theme = shinytheme("united"),
     title = "What's in the pantry?",
 
     titlePanel("What's in my pantry?"),

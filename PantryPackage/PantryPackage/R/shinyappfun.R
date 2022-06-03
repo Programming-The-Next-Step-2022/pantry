@@ -1,11 +1,11 @@
-#' Launches the Shiny app "What's in my pantry". Input ingredients and dietary 
+#' Launches the Shiny app "What's in my pantry". Input ingredients and dietary
 #' restriction and obtain a recipe.
 #'
-#' @return Opens a new tab in your browser with the "What's in my pantry" shiny 
+#' @return Opens a new tab in your browser with the "What's in my pantry" shiny
 #' app. Input ingredients and dietary restriction and obtain a recipe!
 #'
 #' @examples
-#'whatsinmypantry() # function is run with no input; it will launch a window 
+#'whatsinmypantry() # function is run with no input; it will launch a window
 #'#in your browser
 #'
 #' @export
@@ -13,14 +13,15 @@ whatsinmypantry <- function(){
   library(shiny)
   library(PantryPackage)
   library(htmltools)
-  
+  library(shinythemes)
+
   diets <- c("None", "Pescatarian" ,"Vegetarian", "Vegan", "Gluten Free",
              "Dairy Free", "Soy Free", "Pork Free")
-  
+
   app <- shinyApp(
-    ui = fluidPage(
+    ui = fluidPage(theme = shinytheme("united"),
       title = "What's in the pantry?",
-      
+
       titlePanel("What's in my pantry?"),
       textInput("ingredient",
                 "What do you have? Separate ingredients with a comma",
@@ -34,7 +35,7 @@ whatsinmypantry <- function(){
           actionButton("button", "Get recipe!"),
           actionButton("reset", "New search?")
         ),
-        
+
         mainPanel(
           h3("If you want another recipe, click on the 'Get Recipe!' button."),
           h3("If you want to change the ingredients and/or the diet,
@@ -44,24 +45,24 @@ whatsinmypantry <- function(){
       )
     ),
     server = function(input, output, session) {
-      
+
       food <- reactive({
         strsplit(input$ingredient, ",\\s*")[[1]] })
       # creates input into a character vector
-      
+
       restr <- reactive({
         strsplit(input$diet, ",\\s*")[[1]] })
       # creates input into a character vector
-      
+
       n <- reactiveVal(0)
       recipe <- reactive({
         get_info(food(), restr())
       })
-      
+
       observeEvent(input$button, { #pulls up the recipe
-        
+
         n(n() + 1) #for the button to update
-        
+
         output$title <- renderTable({ #renders the title of the recipe
           validate( # error message if recipes have been run through
             need(n() <=  length(recipe()), "Ran out of food :-(")
@@ -70,7 +71,7 @@ whatsinmypantry <- function(){
           colnames(df) <- c("Title")
           return(df)
         })
-        
+
         output$link <- renderUI({ # gives the url to the recipe
           validate(
             need(n() <=  length(recipe()), "Ran out of food :-(")
@@ -78,10 +79,10 @@ whatsinmypantry <- function(){
           url <- a("Link to the recipe",
                    href = recipe()[[n()]][[2]],
                    target = "_blank")
-          
+
           tagList(url)
         })
-        
+
         output$ingtable <- renderTable({ #renders ingredients of the recipe
           validate(
             need(n() <=  length(recipe()), "Ran out of food :-(")
@@ -91,12 +92,12 @@ whatsinmypantry <- function(){
           return(df2)
         })
       })
-      
+
       observeEvent(input$reset, { # reloads the entire app
         session$reload()
       })
     }
   )
-  
+
   runApp(app)
 }
